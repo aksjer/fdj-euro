@@ -28,10 +28,10 @@ export const GridLayout: FC<Props> = ({ grid, position }) => {
     <div className="mb-3">
       <GridLayoutHeader grid={grid} position={position} />
       <div className="row">
-        <div className="col-9">
+        <div className="col-md-9 col-sm-12">
           <MainGrid grid={grid} handleSelect={handleSelect("values")} />
         </div>
-        <div className="col-3">
+        <div className="col-md-3 col-sm-12">
           <BonusGrid grid={grid} handleSelect={handleSelect("bonuses")} />
         </div>
       </div>
