@@ -1,37 +1,21 @@
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import { useSetAtom, WritableAtom } from "jotai";
 import { PropsWithChildren, useEffect, useState } from "react";
-import { Either } from "../models/either.model";
-import { getFakeAxiosResponse } from "../utils/axios.utils";
 
-interface CommonProps<T> {
+interface Props<T> extends PropsWithChildren {
+  promise: () => Promise<AxiosResponse<T>>;
   atom: WritableAtom<T, T>;
 }
 
-interface UrlProps {
-  url: string;
-}
-
-interface MockProps<T> {
-  mock: T;
-}
-
-type Props<T, U> = CommonProps<T> &
-  PropsWithChildren &
-  Either<UrlProps, MockProps<U>>;
-
-export function GenericProvider<T, U>(props: Props<T, U>) {
+export function GenericProvider<T>(props: Props<T>) {
   const setValue = useSetAtom(props.atom);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fn = (promise: Promise<AxiosResponse<T>>) =>
-      promise.then(({ data }) => {
-        setValue(data);
-        setLoading(false);
-      });
-    if (props.url) fn(axios.get(props.url));
-    if (props.mock) fn(getFakeAxiosResponse(props.mock));
+    props.promise().then(({ data }) => {
+      setValue(data);
+      setLoading(false);
+    });
   }, []);
 
   if (loading) {
