@@ -3,12 +3,14 @@ import { FC } from "react";
 import { gridsAtom } from "../atoms/grid.atom";
 import { AddGridButton } from "../components/AddGridButton";
 import { GridLayout } from "../components/GridLayout";
+import { GridsTotalCost } from "../components/GridsTotalCost";
 
 export const MainPage: FC = () => {
   const grids = useAtomValue(gridsAtom);
 
   return (
     <div className="container my-3">
+      <GridsTotalCost />
       {grids.map((g, i) => (
         <GridLayout key={g.id} position={i + 1} grid={g} />
       ))}
